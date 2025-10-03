@@ -1,300 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Task Manager — CRUD</title>
-  <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
-  <link href="./src/output.css" rel="stylesheet" />
-</head>
-<body class="min-h-dvh bg-gradient-to-b from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-900 antialiased selection:bg-fuchsia-300/30">
-  <!-- Decorative background blobs -->
-  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-fuchsia-300/30 blur-3xl"></div>
-    <div class="absolute top-16 right-[-6rem] h-96 w-96 rounded-full bg-sky-300/30 blur-3xl"></div>
-    <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/30 blur-3xl"></div>
-  </div>
-
-  <!-- Header -->
-  <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white">
-    <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
-    <div class="relative mx-auto max-w-5xl px-4 py-10">
-      <div class="flex items-start gap-4">
-        <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-          <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/>
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Task Manager</h1>
-        </div>
-      </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task Manager — CRUD</title>
+    <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
+    <link href="./src/output.css" rel="stylesheet" />
+  </head>
+  <body
+    class="min-h-dvh bg-gradient-to-b from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-900 antialiased selection:bg-fuchsia-300/30"
+  >
+    <!-- Decorative background blobs -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-fuchsia-300/30 blur-3xl"></div>
+      <div class="absolute top-16 right-[-6rem] h-96 w-96 rounded-full bg-sky-300/30 blur-3xl"></div>
+      <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/30 blur-3xl"></div>
     </div>
-  </header>
 
-  <!-- Main -->
-  <main class="mx-auto max-w-5xl px-4 py-8">
-    <!-- Create / Edit Form -->
-    <section class="rounded-2xl bg-white/85 backdrop-blur shadow-sm ring-1 ring-white/50 p-5 md:p-6">
-      <form id="taskForm" class="grid gap-4 md:grid-cols-6">
-        <input type="hidden" id="taskId" />
-        <div class="md:col-span-3">
-          <label for="title" class="block text-sm font-medium text-neutral-800">Title</label>
-          <input id="title" required placeholder="Buy milk"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300" />
+    <!-- Header -->
+    <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 text-white">
+      <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
+      <div class="relative mx-auto max-w-5xl px-4 py-10">
+        <!-- Back button row -->
+        <div class="mb-5 flex items-center justify-between">
+          <a
+            id="backProjects"
+            href="../index.html"
+            title="Back to Projects"
+            aria-label="Back to Projects"
+            class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm backdrop-blur transition hover:border-white/40 hover:bg-white/15"
+          >
+            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20 11H7.83l4.59-4.59L11 5l-7 7 7 7 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            <span>Back to Projects</span>
+          </a>
         </div>
-        <div class="md:col-span-3">
-          <label for="due" class="block text-sm font-medium text-neutral-800">Due Date</label>
-          <input id="due" type="date"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-300" />
-        </div>
-        <div class="md:col-span-4">
-          <label for="notes" class="block text-sm font-medium text-neutral-800">Notes</label>
-          <input id="notes" placeholder="Optional details"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300" />
-        </div>
-        <div class="md:col-span-2">
-          <label for="priority" class="block text-sm font-medium text-neutral-800">Priority</label>
-          <select id="priority"
-                  class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                         focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
-        <div class="md:col-span-6 flex gap-3">
-          <button type="submit"
-                  class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 active:brightness-95 transition"> 
-            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/></svg>
-            <span id="submitLabel">Add Task</span>
-          </button>
-          <button type="reset" id="cancelEdit"
-                  class="hidden rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-neutral-50">
-            Cancel
-          </button>
-        </div>
-      </form>
-    </section>
 
-    <!-- Tools -->
-    <section class="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-      <div class="flex flex-wrap items-center gap-3">
-        <label class="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-2 ring-1 ring-white/60 backdrop-blur">
-          <input type="checkbox" id="showCompleted" class="size-4 accent-violet-600" />
-          <span class="text-sm">Show completed</span>
-        </label>
-        <select id="filterPriority"
-                class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300">
-          <option value="all">All priorities</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-      <div class="relative w-full md:w-80">
-        <input id="search" placeholder="Search tasks..."
-               class="w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm
-                      focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300" />
-        <svg class="pointer-events-none absolute left-2 top-2.5 size-4 text-neutral-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"/>
-        </svg>
-      </div>
-    </section>
-
-    <!-- List -->
-    <section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="taskList"></section>
-  </main>
-
-  <footer class="py-10 text-center text-xs text-neutral-500">Built with Tailwind 4.1 — LocalStorage CRUD</footer>
-
-  <!-- Card Template -->
-  <template id="taskCardTpl">
-    <article class="group rounded-2xl bg-white/90 backdrop-blur p-4 md:p-5 shadow ring-1 ring-white/60 transition hover:-translate-y-0.5 hover:shadow-md">
-      <div class="flex items-start justify-between gap-4">
-        <div class="flex items-start gap-3">
-          <input type="checkbox" class="mt-1 size-5 shrink-0 accent-violet-600" data-action="toggle" />
+        <!-- Title row -->
+        <div class="flex items-start gap-4">
+          <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
+            <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z" />
+            </svg>
+          </div>
           <div>
-            <h3 class="font-semibold leading-tight"></h3>
-            <p class="mt-1 text-sm text-neutral-600"></p>
-            <div class="mt-2 flex flex-wrap gap-2 text-xs">
-              <span class="px-2 py-1 rounded-full ring-1" data-priority></span>
-              <span class="px-2 py-1 rounded-full bg-neutral-100 text-neutral-700 ring-1 ring-neutral-200" data-due></span>
-            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Task Manager</h1>
           </div>
         </div>
-        <div class="flex gap-2">
-          <button class="rounded-lg px-3 py-1.5 text-sm border border-neutral-300 bg-white hover:bg-neutral-50" data-action="edit">Edit</button>
-          <button class="rounded-lg px-3 py-1.5 text-sm bg-rose-600 text-white hover:bg-rose-500" data-action="delete">Delete</button>
-        </div>
       </div>
-    </article>
-  </template>
+    </header>
 
-  <script>
-    // --- Data ---
-    const KEY = 'tasks.v1';
-    let tasks = JSON.parse(localStorage.getItem(KEY) || '[]');
+    <!-- Main -->
+    <main class="mx-auto max-w-5xl px-4 py-8">
+      <!-- Create / Edit Form -->
+      <section class="rounded-2xl bg-white/85 backdrop-blur shadow-sm ring-1 ring-white/50 p-5 md:p-6">
+        <form id="taskForm" class="grid gap-4 md:grid-cols-6">
+          <input type="hidden" id="taskId" />
+          <div class="md:col-span-3">
+            <label for="title" class="block text-sm font-medium text-neutral-800">Title</label>
+            <input id="title" required placeholder="Buy milk" class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300" />
+          </div>
+          <div class="md:col-span-3">
+            <label for="due" class="block text-sm font-medium text-neutral-800">Due Date</label>
+            <input id="due" type="date" class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-300" />
+          </div>
+          <div class="md:col-span-4">
+            <label for="notes" class="block text-sm font-medium text-neutral-800">Notes</label>
+            <input id="notes" placeholder="Optional details" class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300" />
+          </div>
+          <div class="md:col-span-2">
+            <label for="priority" class="block text-sm font-medium text-neutral-800">Priority</label>
+            <select id="priority" class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="md:col-span-6 flex gap-3">
+            <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:brightness-110 active:brightness-95">
+              <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z" /></svg>
+              <span id="submitLabel">Add Task</span>
+            </button>
+            <button type="reset" id="cancelEdit" class="hidden rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-neutral-50">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
 
-    // --- Elements ---
-    const form = document.getElementById('taskForm');
-    const taskIdEl = document.getElementById('taskId');
-    const titleEl = document.getElementById('title');
-    const notesEl = document.getElementById('notes');
-    const dueEl = document.getElementById('due');
-    const priorityEl = document.getElementById('priority');
-    const submitLabel = document.getElementById('submitLabel');
-    const cancelEdit = document.getElementById('cancelEdit');
+      <!-- Tools -->
+      <section class="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-wrap items-center gap-3">
+          <label class="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-2 ring-1 ring-white/60 backdrop-blur">
+            <input type="checkbox" id="showCompleted" class="size-4 accent-violet-600" />
+            <span class="text-sm">Show completed</span>
+          </label>
+          <select id="filterPriority" class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300">
+            <option value="all">All priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="relative w-full md:w-80">
+          <input id="search" placeholder="Search tasks..." class="w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300" />
+          <svg class="pointer-events-none absolute left-2 top-2.5 size-4 text-neutral-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"/>
+          </svg>
+        </div>
+      </section>
 
-    const showCompleted = document.getElementById('showCompleted');
-    const filterPriority = document.getElementById('filterPriority');
-    const search = document.getElementById('search');
-    const list = document.getElementById('taskList');
-    const tpl = document.getElementById('taskCardTpl');
+      <!-- List -->
+      <section class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="taskList"></section>
+    </main>
 
-    // --- Utils ---
-    const save = () => localStorage.setItem(KEY, JSON.stringify(tasks));
-    const uid = () => crypto.randomUUID();
+    <!-- Card Template -->
+    <template id="taskCardTpl">
+      <article class="group rounded-2xl bg-white/90 backdrop-blur p-4 md:p-5 shadow ring-1 ring-white/60 transition hover:-translate-y-0.5 hover:shadow-md">
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-start gap-3">
+            <input type="checkbox" class="mt-1 size-5 shrink-0 accent-violet-600" data-action="toggle" />
+            <div>
+              <h3 class="font-semibold leading-tight"></h3>
+              <p class="mt-1 text-sm text-neutral-600"></p>
+              <div class="mt-2 flex flex-wrap gap-2 text-xs">
+                <span class="px-2 py-1 rounded-full ring-1" data-priority></span>
+                <span class="px-2 py-1 rounded-full bg-neutral-100 text-neutral-700 ring-1 ring-neutral-200" data-due></span>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="rounded-lg px-3 py-1.5 text-sm border border-neutral-300 bg-white hover:bg-neutral-50" data-action="edit">Edit</button>
+            <button class="rounded-lg px-3 py-1.5 text-sm bg-rose-600 text-white hover:bg-rose-500" data-action="delete">Delete</button>
+          </div>
+        </div>
+      </article>
+    </template>
 
-    function resetForm() {
-      taskIdEl.value = '';
-      form.reset();
-      submitLabel.textContent = 'Add Task';
-      cancelEdit.classList.add('hidden');
-    }
+    <script>
+      // Smart "Back to Projects": go history.back() when coming from same origin; else open ../index.html
+      (function () {
+        const link = document.getElementById('backProjects');
+        if (!link) return;
+        link.addEventListener('click', function (e) {
+          try {
+            const ref = document.referrer ? new URL(document.referrer) : null;
+            if (ref && ref.origin === location.origin && history.length > 1) {
+              e.preventDefault();
+              history.back();
+            }
+          } catch (_) { /* no-op */ }
+        });
+      })();
 
-    // --- CRUD handlers ---
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const id = taskIdEl.value || uid();
-      const payload = {
-        id,
-        title: titleEl.value.trim(),
-        notes: notesEl.value.trim(),
-        due: dueEl.value || '',
-        priority: priorityEl.value,
-        completed: tasks.find(t => t.id === id)?.completed || false,
-        createdAt: tasks.find(t => t.id === id)?.createdAt || Date.now(),
-        updatedAt: Date.now(),
-      };
+      // --- Data ---
+      const KEY = "tasks.v1";
+      let tasks = JSON.parse(localStorage.getItem(KEY) || "[]");
 
-      const exists = tasks.some(t => t.id === id);
-      if (exists) {
-        tasks = tasks.map(t => t.id === id ? payload : t);
-      } else {
-        tasks.unshift(payload);
+      // --- Elements ---
+      const form = document.getElementById("taskForm");
+      const taskIdEl = document.getElementById("taskId");
+      const titleEl = document.getElementById("title");
+      const notesEl = document.getElementById("notes");
+      const dueEl = document.getElementById("due");
+      const priorityEl = document.getElementById("priority");
+      const submitLabel = document.getElementById("submitLabel");
+      const cancelEdit = document.getElementById("cancelEdit");
+
+      const showCompleted = document.getElementById("showCompleted");
+      const filterPriority = document.getElementById("filterPriority");
+      const search = document.getElementById("search");
+      const list = document.getElementById("taskList");
+      const tpl = document.getElementById("taskCardTpl");
+
+      // --- Utils ---
+      const save = () => localStorage.setItem(KEY, JSON.stringify(tasks));
+      const uid = () => crypto.randomUUID();
+
+      function resetForm() {
+        taskIdEl.value = "";
+        form.reset();
+        submitLabel.textContent = "Add Task";
+        cancelEdit.classList.add("hidden");
       }
-      save();
-      render();
-      resetForm();
-    });
 
-    cancelEdit.addEventListener('click', (e) => {
-      e.preventDefault();
-      resetForm();
-    });
+      // --- CRUD handlers ---
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = taskIdEl.value || uid();
+        const payload = {
+          id,
+          title: titleEl.value.trim(),
+          notes: notesEl.value.trim(),
+          due: dueEl.value || "",
+          priority: priorityEl.value,
+          completed: tasks.find((t) => t.id === id)?.completed || false,
+          createdAt: tasks.find((t) => t.id === id)?.createdAt || Date.now(),
+          updatedAt: Date.now(),
+        };
 
-    list.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      const card = btn.closest('article');
-      const id = card.dataset.id;
-      const action = btn.dataset.action;
-
-      if (action === 'delete') {
-        tasks = tasks.filter(t => t.id !== id);
-        save();
-        render();
-      }
-      if (action === 'edit') {
-        const t = tasks.find(t => t.id === id);
-        taskIdEl.value = t.id;
-        titleEl.value = t.title;
-        notesEl.value = t.notes;
-        dueEl.value = t.due;
-        priorityEl.value = t.priority;
-        submitLabel.textContent = 'Update Task';
-        cancelEdit.classList.remove('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      if (action === 'toggle') {
-        const t = tasks.find(t => t.id === id);
-        t.completed = !t.completed;
-        t.updatedAt = Date.now();
-        save();
-        render();
-      }
-    });
-
-    // --- Filters ---
-    [showCompleted, filterPriority, search].forEach(el => el.addEventListener('input', render));
-
-    function matchesFilters(t) {
-      if (!showCompleted.checked && t.completed) return false;
-      if (filterPriority.value !== 'all' && t.priority !== filterPriority.value) return false;
-      const q = search.value.trim().toLowerCase();
-      if (q && !(t.title.toLowerCase().includes(q) || t.notes.toLowerCase().includes(q))) return false;
-      return true;
-    }
-
-    // Priority chip styles (catchy but readable)
-    function priorityClasses(p) {
-      return ({
-        low:    'bg-emerald-100 text-emerald-800 ring-emerald-300',
-        medium: 'bg-amber-100 text-amber-800 ring-amber-300',
-        high:   'bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300',
-      }[p] || 'bg-neutral-100 text-neutral-800 ring-neutral-300');
-    }
-
-    // --- Render ---
-    function render() {
-      list.innerHTML = '';
-      const frag = document.createDocumentFragment();
-      const filtered = tasks.filter(matchesFilters).sort((a,b)=>b.updatedAt - a.updatedAt);
-
-      filtered.forEach(t => {
-        const node = tpl.content.cloneNode(true);
-        const card = node.querySelector('article');
-        card.dataset.id = t.id;
-
-        const title = node.querySelector('h3');
-        const p = node.querySelector('p');
-        const pr = node.querySelector('[data-priority]');
-        const due = node.querySelector('[data-due]');
-        const cb = node.querySelector('[data-action="toggle"]');
-
-        title.textContent = t.title;
-        p.textContent = t.notes || '—';
-        pr.textContent = t.priority.charAt(0).toUpperCase() + t.priority.slice(1);
-        pr.className = 'px-2 py-1 rounded-full ring-1 ' + priorityClasses(t.priority);
-        due.textContent = t.due ? `Due ${new Date(t.due).toLocaleDateString()}` : 'No due date';
-        cb.checked = !!t.completed;
-
-        if (t.completed) {
-          title.classList.add('line-through', 'text-neutral-400');
-          card.classList.add('opacity-75');
+        const exists = tasks.some((t) => t.id === id);
+        if (exists) {
+          tasks = tasks.map((t) => (t.id === id ? payload : t));
+        } else {
+          tasks.unshift(payload);
         }
-        frag.appendChild(node);
+        save();
+        render();
+        resetForm();
       });
 
-      list.appendChild(frag);
+      cancelEdit.addEventListener("click", (e) => {
+        e.preventDefault();
+        resetForm();
+      });
 
-      if (!filtered.length) {
-        const empty = document.createElement('div');
-        empty.className = 'col-span-full rounded-2xl border border-dashed border-white/60 bg-white/70 p-10 text-center text-neutral-500';
-        empty.innerHTML = `
+      list.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const card = btn.closest("article");
+        const id = card.dataset.id;
+        const action = btn.dataset.action;
+
+        if (action === "delete") {
+          tasks = tasks.filter((t) => t.id !== id);
+          save();
+          render();
+        }
+        if (action === "edit") {
+          const t = tasks.find((t) => t.id === id);
+          taskIdEl.value = t.id;
+          titleEl.value = t.title;
+          notesEl.value = t.notes;
+          dueEl.value = t.due;
+          priorityEl.value = t.priority;
+          submitLabel.textContent = "Update Task";
+          cancelEdit.classList.remove("hidden");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+        if (action === "toggle") {
+          const t = tasks.find((t) => t.id === id);
+          t.completed = !t.completed;
+          t.updatedAt = Date.now();
+          save();
+          render();
+        }
+      });
+
+      // --- Filters ---
+      [showCompleted, filterPriority, search].forEach((el) =>
+        el.addEventListener("input", render)
+      );
+
+      function matchesFilters(t) {
+        if (!showCompleted.checked && t.completed) return false;
+        if (filterPriority.value !== "all" && t.priority !== filterPriority.value) return false;
+        const q = search.value.trim().toLowerCase();
+        if (q && !(t.title.toLowerCase().includes(q) || t.notes.toLowerCase().includes(q))) return false;
+        return true;
+      }
+
+      // Priority chip styles
+      function priorityClasses(p) {
+        return (
+          {
+            low: "bg-emerald-100 text-emerald-800 ring-emerald-300",
+            medium: "bg-amber-100 text-amber-800 ring-amber-300",
+            high: "bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300",
+          }[p] || "bg-neutral-100 text-neutral-800 ring-neutral-300"
+        );
+      }
+
+      // --- Render ---
+      function render() {
+        list.innerHTML = "";
+        const frag = document.createDocumentFragment();
+        const filtered = tasks
+          .filter(matchesFilters)
+          .sort((a, b) => b.updatedAt - a.updatedAt);
+
+        filtered.forEach((t) => {
+          const node = tpl.content.cloneNode(true);
+          const card = node.querySelector("article");
+          card.dataset.id = t.id;
+
+          const title = node.querySelector("h3");
+          const p = node.querySelector("p");
+          const pr = node.querySelector("[data-priority]");
+          const due = node.querySelector("[data-due]");
+          const cb = node.querySelector('[data-action="toggle"]');
+
+          title.textContent = t.title;
+          p.textContent = t.notes || "—";
+          pr.textContent = t.priority.charAt(0).toUpperCase() + t.priority.slice(1);
+          pr.className = "px-2 py-1 rounded-full ring-1 " + priorityClasses(t.priority);
+          due.textContent = t.due ? `Due ${new Date(t.due).toLocaleDateString()}` : "No due date";
+          cb.checked = !!t.completed;
+
+          if (t.completed) {
+            title.classList.add("line-through", "text-neutral-400");
+            card.classList.add("opacity-75");
+          }
+          frag.appendChild(node);
+        });
+
+        list.appendChild(frag);
+
+        if (!filtered.length) {
+          const empty = document.createElement("div");
+          empty.className =
+            "col-span-full rounded-2xl border border-dashed border-white/60 bg-white/70 p-10 text-center text-neutral-500";
+          empty.innerHTML = `
           <div class="mx-auto mb-3 grid size-10 place-items-center rounded-xl bg-gradient-to-r from-fuchsia-100 to-sky-100 text-violet-600 ring-1 ring-white/60">
             <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/></svg>
           </div>
           <p class="text-sm">No tasks yet. Add your first one above.</p>`;
-        list.appendChild(empty);
+          list.appendChild(empty);
+        }
       }
-    }
 
-    render();
-  </script>
-</body>
+      render();
+    </script>
+  </body>
 </html>

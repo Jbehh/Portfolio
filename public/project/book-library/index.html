@@ -1,341 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Book Library — CRUD</title>
-  <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
-  <link href="./src/output.css" rel="stylesheet" />
-</head>
-<body class="min-h-dvh bg-gradient-to-b from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-900 antialiased selection:bg-fuchsia-300/30">
-  <!-- Decorative background blobs -->
-  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-fuchsia-300/30 blur-3xl"></div>
-    <div class="absolute top-16 right-[-6rem] h-96 w-96 rounded-full bg-sky-300/30 blur-3xl"></div>
-    <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/30 blur-3xl"></div>
-  </div>
-
-  <!-- Header -->
-  <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 text-white">
-    <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
-    <div class="relative mx-auto max-w-6xl px-4 py-10">
-      <div class="flex items-start gap-4">
-        <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-          <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M18 2H8a2 2 0 0 0-2 2v16a4 4 0 0 1 4-4h10V4a2 2 0 0 0-2-2zm-2 12H10a2 2 0 0 0-2 2V4h8v10z"/>
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Book Library</h1>
-        </div>
-      </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Book Library — CRUD</title>
+    <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
+    <link href="./src/output.css" rel="stylesheet" />
+  </head>
+  <body
+    class="min-h-dvh bg-gradient-to-b from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-900 antialiased selection:bg-fuchsia-300/30"
+  >
+    <!-- Decorative background blobs -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div
+        class="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-fuchsia-300/30 blur-3xl"
+      ></div>
+      <div
+        class="absolute top-16 right-[-6rem] h-96 w-96 rounded-full bg-sky-300/30 blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/30 blur-3xl"
+      ></div>
     </div>
-  </header>
 
-  <!-- Main -->
-  <main class="mx-auto max-w-6xl px-4 py-8 space-y-6">
-    <!-- Stats (color accents) -->
-    <section class="grid gap-4 sm:grid-cols-4">
-      <div class="rounded-2xl bg-white/80 p-4 ring-1 ring-fuchsia-200 shadow-sm backdrop-blur">
-        <div class="h-1 w-12 rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500"></div>
-        <p class="mt-3 text-xs text-neutral-500">Total Books</p>
-        <p id="statTotal" class="mt-1 text-2xl font-semibold">0</p>
-      </div>
-      <div class="rounded-2xl bg-white/80 p-4 ring-1 ring-sky-200 shadow-sm backdrop-blur">
-        <div class="h-1 w-12 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500"></div>
-        <p class="mt-3 text-xs text-neutral-500">To Read</p>
-        <p id="statToRead" class="mt-1 text-2xl font-semibold">0</p>
-      </div>
-      <div class="rounded-2xl bg-white/80 p-4 ring-1 ring-amber-200 shadow-sm backdrop-blur">
-        <div class="h-1 w-12 rounded-full bg-gradient-to-r from-amber-500 to-orange-500"></div>
-        <p class="mt-3 text-xs text-neutral-500">Reading</p>
-        <p id="statReading" class="mt-1 text-2xl font-semibold">0</p>
-      </div>
-      <div class="rounded-2xl bg-white/80 p-4 ring-1 ring-emerald-200 shadow-sm backdrop-blur">
-        <div class="h-1 w-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"></div>
-        <p class="mt-3 text-xs text-neutral-500">Finished</p>
-        <p id="statFinished" class="mt-1 text-2xl font-semibold">0</p>
-      </div>
-    </section>
-
-    <!-- Form / Controls (glass card) -->
-    <section class="rounded-2xl bg-white/85 p-6 shadow-sm ring-1 ring-white/50 backdrop-blur">
-      <form id="bookForm" class="grid gap-4 md:grid-cols-8">
-        <input type="hidden" id="bid" />
-        <div class="md:col-span-3">
-          <label class="block text-sm font-medium text-neutral-800">Title</label>
-          <input id="title" required placeholder="Narnia"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300" />
-        </div>
-        <div class="md:col-span-3">
-          <label class="block text-sm font-medium text-neutral-800">Author</label>
-          <input id="author" required placeholder="Robert C. Martin"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-300" />
-        </div>
-        <div class="md:col-span-1">
-          <label class="block text-sm font-medium text-neutral-800">Year</label>
-          <input id="year" type="number" min="0" placeholder="2008"
-                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300" />
-        </div>
-        <div class="md:col-span-1">
-          <label class="block text-sm font-medium text-neutral-800">Status</label>
-          <select id="status"
-                  class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                         focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-300">
-            <option>To Read</option>
-            <option>Reading</option>
-            <option>Finished</option>
-          </select>
-        </div>
-
-        <div class="md:col-span-8 flex flex-wrap items-center gap-3">
-          <button type="submit"
-                  class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 transition">
+    <!-- Header -->
+    <header
+      class="relative isolate border-b border-white/40 bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 text-white"
+    >
+      <div
+        class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"
+      ></div>
+      <div class="relative mx-auto max-w-6xl px-4 py-10">
+        <!-- Back button -->
+        <div class="mb-5">
+          <a
+            id="backProjects"
+            href="../index.html"
+            title="Back to My Portfolio"
+            aria-label="Back to My Portfolio"
+            class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm backdrop-blur transition hover:border-white/40 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+          >
             <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/>
+              <path d="M20 11H7.83l4.59-4.59L11 5l-7 7 7 7 1.41-1.41L7.83 13H20v-2z"/>
             </svg>
-            <span id="submitLabel">Add Book</span>
-          </button>
-          <button id="cancel" type="reset"
-                  class="hidden rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-neutral-50">
-            Cancel
-          </button>
+            <span>Back to My Portfolio</span>
+          </a>
+        </div>
 
-          <div class="ml-auto flex flex-wrap items-center gap-3">
-            <div class="relative">
-              <input id="search" placeholder="Search title or author…"
-                     class="w-64 rounded-xl border border-neutral-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm
-                            focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300" />
-              <svg class="pointer-events-none absolute left-2.5 top-2.5 size-4 text-neutral-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"/>
-              </svg>
-            </div>
-            <select id="filterStatus"
-                    class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300">
-              <option value="all">All statuses</option>
+        <div class="flex items-start gap-4">
+          <div
+            class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur"
+          >
+            <svg
+              class="size-6"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M18 2H8a2 2 0 0 0-2 2v16a4 4 0 0 1 4-4h10V4a2 2 0 0 0-2-2zm-2 12H10a2 2 0 0 0-2 2V4h8v10z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Book Library
+            </h1>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="mx-auto max-w-6xl px-4 py-8 space-y-6">
+      <!-- Stats (color accents) -->
+      <section class="grid gap-4 sm:grid-cols-4">
+        <div
+          class="rounded-2xl bg-white/80 p-4 ring-1 ring-fuchsia-200 shadow-sm backdrop-blur"
+        >
+          <div
+            class="h-1 w-12 rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500"
+          ></div>
+          <p class="mt-3 text-xs text-neutral-500">Total Books</p>
+          <p id="statTotal" class="mt-1 text-2xl font-semibold">0</p>
+        </div>
+        <div
+          class="rounded-2xl bg-white/80 p-4 ring-1 ring-sky-200 shadow-sm backdrop-blur"
+        >
+          <div
+            class="h-1 w-12 rounded-full bg-gradient-to-r from-sky-500 to-cyan-500"
+          ></div>
+          <p class="mt-3 text-xs text-neutral-500">To Read</p>
+          <p id="statToRead" class="mt-1 text-2xl font-semibold">0</p>
+        </div>
+        <div
+          class="rounded-2xl bg-white/80 p-4 ring-1 ring-amber-200 shadow-sm backdrop-blur"
+        >
+          <div
+            class="h-1 w-12 rounded-full bg-gradient-to-r from-amber-500 to-orange-500"
+          ></div>
+          <p class="mt-3 text-xs text-neutral-500">Reading</p>
+          <p id="statReading" class="mt-1 text-2xl font-semibold">0</p>
+        </div>
+        <div
+          class="rounded-2xl bg-white/80 p-4 ring-1 ring-emerald-200 shadow-sm backdrop-blur"
+        >
+          <div
+            class="h-1 w-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"
+          ></div>
+          <p class="mt-3 text-xs text-neutral-500">Finished</p>
+          <p id="statFinished" class="mt-1 text-2xl font-semibold">0</p>
+        </div>
+      </section>
+
+      <!-- Form / Controls (glass card) -->
+      <section
+        class="rounded-2xl bg-white/85 p-6 shadow-sm ring-1 ring-white/50 backdrop-blur"
+      >
+        <form id="bookForm" class="grid gap-4 md:grid-cols-8">
+          <input type="hidden" id="bid" />
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-neutral-800"
+              >Title</label
+            >
+            <input
+              id="title"
+              required
+              placeholder="Narnia"
+              class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300"
+            />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-sm font-medium text-neutral-800"
+              >Author</label
+            >
+            <input
+              id="author"
+              required
+              placeholder="Robert C. Martin"
+              class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-sky-300"
+            />
+          </div>
+          <div class="md:col-span-1">
+            <label class="block text-sm font-medium text-neutral-800"
+              >Year</label
+            >
+            <input
+              id="year"
+              type="number"
+              min="0"
+              placeholder="2008"
+              class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300"
+            />
+          </div>
+          <div class="md:col-span-1">
+            <label class="block text-sm font-medium text-neutral-800"
+              >Status</label
+            >
+            <select
+              id="status"
+              class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-300"
+            >
               <option>To Read</option>
               <option>Reading</option>
               <option>Finished</option>
             </select>
-            <select id="sort"
-                    class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300">
-              <option value="updated">Sort: Recently updated</option>
-              <option value="title">Sort: Title (A→Z)</option>
-              <option value="author">Sort: Author (A→Z)</option>
-              <option value="year">Sort: Year (new→old)</option>
-            </select>
           </div>
+
+          <div class="md:col-span-8 flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-violet-600 to-sky-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z" />
+              </svg>
+              <span id="submitLabel">Add Book</span>
+            </button>
+            <button
+              id="cancel"
+              type="reset"
+              class="hidden rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-neutral-50"
+            >
+              Cancel
+            </button>
+
+            <div class="ml-auto flex flex-wrap items-center gap-3">
+              <div class="relative">
+                <input
+                  id="search"
+                  placeholder="Search title or author…"
+                  class="w-64 rounded-xl border border-neutral-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300"
+                />
+                <svg
+                  class="pointer-events-none absolute left-2.5 top-2.5 size-4 text-neutral-400"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"
+                  />
+                </svg>
+              </div>
+              <select
+                id="filterStatus"
+                class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300"
+              >
+                <option value="all">All statuses</option>
+                <option>To Read</option>
+                <option>Reading</option>
+                <option>Finished</option>
+              </select>
+              <select
+                id="sort"
+                class="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300"
+              >
+                <option value="updated">Sort: Recently updated</option>
+                <option value="title">Sort: Title (A→Z)</option>
+                <option value="author">Sort: Author (A→Z)</option>
+                <option value="year">Sort: Year (new→old)</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Table (tinted header + soft hover) -->
+      <section
+        class="overflow-x-auto rounded-2xl bg-white/90 ring-1 ring-white/50 backdrop-blur"
+      >
+        <table class="min-w-full table-fixed text-sm">
+          <thead
+            class="bg-gradient-to-r from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-700 ring-1 ring-white/50"
+          >
+            <tr>
+              <th class="px-4 py-3 text-left font-medium w-[42%]">Title</th>
+              <th class="px-4 py-3 text-left font-medium w-[28%]">Author</th>
+              <th class="px-4 py-3 text-left font-medium w-[10%]">Year</th>
+              <th class="px-4 py-3 text-left font-medium w-[12%]">Status</th>
+              <th class="px-4 py-3 text-right font-medium w-[8%]">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="rows" class="divide-y divide-neutral-100"></tbody>
+        </table>
+        <!-- Empty state -->
+        <div id="empty" class="hidden p-10 text-center text-neutral-500">
+          <div
+            class="mx-auto mb-3 grid size-10 place-items-center rounded-xl bg-gradient-to-r from-fuchsia-100 to-sky-100 text-violet-600 ring-1 ring-white/60"
+          >
+            <svg
+              class="size-5"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z" />
+            </svg>
+          </div>
+          <p class="text-sm">No books yet. Add your first one above.</p>
         </div>
-      </form>
-    </section>
+      </section>
+    </main>
 
-    <!-- Table (tinted header + soft hover) -->
-    <section class="overflow-x-auto rounded-2xl bg-white/90 ring-1 ring-white/50 backdrop-blur">
-      <table class="min-w-full table-fixed text-sm">
-        <thead class="bg-gradient-to-r from-fuchsia-50 via-sky-50 to-indigo-50 text-neutral-700 ring-1 ring-white/50">
-          <tr>
-            <th class="px-4 py-3 text-left font-medium w-[42%]">Title</th>
-            <th class="px-4 py-3 text-left font-medium w-[28%]">Author</th>
-            <th class="px-4 py-3 text-left font-medium w-[10%]">Year</th>
-            <th class="px-4 py-3 text-left font-medium w-[12%]">Status</th>
-            <th class="px-4 py-3 text-right font-medium w-[8%]">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="rows" class="divide-y divide-neutral-100"></tbody>
-      </table>
-      <!-- Empty state -->
-      <div id="empty" class="hidden p-10 text-center text-neutral-500">
-        <div class="mx-auto mb-3 grid size-10 place-items-center rounded-xl bg-gradient-to-r from-fuchsia-100 to-sky-100 text-violet-600 ring-1 ring-white/60">
-          <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/>
-          </svg>
-        </div>
-        <p class="text-sm">No books yet. Add your first one above.</p>
-      </div>
-    </section>
-  </main>
+    <!-- Row Template -->
+    <template id="rowTpl">
+      <tr
+        class="hover:bg-gradient-to-r hover:from-fuchsia-50/70 hover:via-sky-50/70 hover:to-indigo-50/70 transition"
+      >
+        <td class="px-4 py-3">
+          <div class="font-medium text-neutral-900"></div>
+        </td>
+        <td class="px-4 py-3 text-neutral-700"></td>
+        <td class="px-4 py-3 text-neutral-700"></td>
+        <td class="px-4 py-3">
+          <span
+            data-status
+            class="inline-flex items-center rounded-full px-2 py-1 text-xs ring-1"
+          ></span>
+        </td>
+        <td class="px-4 py-3">
+          <div class="flex items-center justify-end gap-2">
+            <button
+              class="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold hover:bg-neutral-50"
+            >
+              Edit
+            </button>
+            <button
+              class="rounded-md bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500"
+              data-action="delete"
+            >
+              Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+    </template>
 
-  <!-- Row Template -->
-  <template id="rowTpl">
-    <tr class="hover:bg-gradient-to-r hover:from-fuchsia-50/70 hover:via-sky-50/70 hover:to-indigo-50/70 transition">
-      <td class="px-4 py-3">
-        <div class="font-medium text-neutral-900"></div>
-      </td>
-      <td class="px-4 py-3 text-neutral-700"></td>
-      <td class="px-4 py-3 text-neutral-700"></td>
-      <td class="px-4 py-3">
-        <span data-status class="inline-flex items-center rounded-full px-2 py-1 text-xs ring-1"></span>
-      </td>
-      <td class="px-4 py-3">
-        <div class="flex items-center justify-end gap-2">
-          <button class="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold hover:bg-neutral-50">Edit</button>
-          <button class="rounded-md bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500" data-action="delete">Delete</button>
-        </div>
-      </td>
-    </tr>
-  </template>
+    <!-- Smart Back script -->
+    <script>
+      (function () {
+        const link = document.getElementById('backProjects');
+        if (!link) return;
+        link.addEventListener('click', function (e) {
+          try {
+            const ref = document.referrer ? new URL(document.referrer) : null;
+            if (ref && ref.origin === location.origin && history.length > 1) {
+              e.preventDefault();
+              history.back();
+            }
+          } catch (_) { /* no-op */ }
+        });
+      })();
+    </script>
 
-  <script>
-    const KEY = 'books.v1';
-    let books = JSON.parse(localStorage.getItem(KEY) || '[]');
+    <script>
+      const KEY = "books.v1";
+      let books = JSON.parse(localStorage.getItem(KEY) || "[]");
 
-    // Elements
-    const form = document.getElementById('bookForm');
-    const idEl = document.getElementById('bid');
-    const titleEl = document.getElementById('title');
-    const authorEl = document.getElementById('author');
-    const yearEl = document.getElementById('year');
-    const statusEl = document.getElementById('status');
-    const submitLabel = document.getElementById('submitLabel');
-    const cancel = document.getElementById('cancel');
+      // Elements
+      const form = document.getElementById("bookForm");
+      const idEl = document.getElementById("bid");
+      const titleEl = document.getElementById("title");
+      const authorEl = document.getElementById("author");
+      const yearEl = document.getElementById("year");
+      const statusEl = document.getElementById("status");
+      const submitLabel = document.getElementById("submitLabel");
+      const cancel = document.getElementById("cancel");
 
-    const search = document.getElementById('search');
-    const sort = document.getElementById('sort');
-    const filterStatus = document.getElementById('filterStatus');
+      const search = document.getElementById("search");
+      const sort = document.getElementById("sort");
+      const filterStatus = document.getElementById("filterStatus");
 
-    const rows = document.getElementById('rows');
-    const empty = document.getElementById('empty');
-    const tpl = document.getElementById('rowTpl');
+      const rows = document.getElementById("rows");
+      const empty = document.getElementById("empty");
+      const tpl = document.getElementById("rowTpl");
 
-    const statTotal = document.getElementById('statTotal');
-    const statToRead = document.getElementById('statToRead');
-    const statReading = document.getElementById('statReading');
-    const statFinished = document.getElementById('statFinished');
+      const statTotal = document.getElementById("statTotal");
+      const statToRead = document.getElementById("statToRead");
+      const statReading = document.getElementById("statReading");
+      const statFinished = document.getElementById("statFinished");
 
-    // Helpers
-    const save = () => localStorage.setItem(KEY, JSON.stringify(books));
-    const uid = () => crypto.randomUUID();
+      // Helpers
+      const save = () => localStorage.setItem(KEY, JSON.stringify(books));
+      const uid = () => crypto.randomUUID();
 
-    function statusPill(status) {
-      // More vibrant but readable chip colors
-      return ({
-        'To Read':  ['bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300'],
-        'Reading':  ['bg-amber-100 text-amber-800 ring-amber-300'],
-        'Finished': ['bg-emerald-100 text-emerald-800 ring-emerald-300'],
-      }[status] || ['bg-neutral-100 text-neutral-800 ring-neutral-300']);
-    }
+      function statusPill(status) {
+        return (
+          {
+            "To Read": ["bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300"],
+            Reading: ["bg-amber-100 text-amber-800 ring-amber-300"],
+            Finished: ["bg-emerald-100 text-emerald-800 ring-emerald-300"],
+          }[status] || ["bg-neutral-100 text-neutral-800 ring-neutral-300"]
+        );
+      }
 
-    function sortFn(a, b) {
-      const mode = sort.value;
-      if (mode === 'title')  return a.title.localeCompare(b.title);
-      if (mode === 'author') return a.author.localeCompare(b.author);
-      if (mode === 'year')   return (b.year || 0) - (a.year || 0);
-      return b.updatedAt - a.updatedAt; // updated
-    }
+      function sortFn(a, b) {
+        const mode = sort.value;
+        if (mode === "title") return a.title.localeCompare(b.title);
+        if (mode === "author") return a.author.localeCompare(b.author);
+        if (mode === "year") return (b.year || 0) - (a.year || 0);
+        return b.updatedAt - a.updatedAt; // updated
+      }
 
-    function matchesFilters(b) {
-      const q = search.value.trim().toLowerCase();
-      const s = filterStatus.value;
-      if (q && !(b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q))) return false;
-      if (s !== 'all' && b.status !== s) return false;
-      return true;
-    }
+      function matchesFilters(b) {
+        const q = search.value.trim().toLowerCase();
+        const s = filterStatus.value;
+        if (
+          q &&
+          !(
+            b.title.toLowerCase().includes(q) ||
+            b.author.toLowerCase().includes(q)
+          )
+        )
+          return false;
+        if (s !== "all" && b.status !== s) return false;
+        return true;
+      }
 
-    function updateStats() {
-      statTotal.textContent = books.length;
-      statToRead.textContent = books.filter(b => b.status === 'To Read').length;
-      statReading.textContent = books.filter(b => b.status === 'Reading').length;
-      statFinished.textContent = books.filter(b => b.status === 'Finished').length;
-    }
+      function updateStats() {
+        statTotal.textContent = books.length;
+        statToRead.textContent = books.filter(
+          (b) => b.status === "To Read"
+        ).length;
+        statReading.textContent = books.filter(
+          (b) => b.status === "Reading"
+        ).length;
+        statFinished.textContent = books.filter(
+          (b) => b.status === "Finished"
+        ).length;
+      }
 
-    function render() {
-      rows.innerHTML = '';
-      const results = books.filter(matchesFilters).sort(sortFn);
+      function render() {
+        rows.innerHTML = "";
+        const results = books.filter(matchesFilters).sort(sortFn);
 
-      // Empty state toggle
-      empty.classList.toggle('hidden', results.length !== 0);
+        empty.classList.toggle("hidden", results.length !== 0);
 
-      const frag = document.createDocumentFragment();
-      results.forEach(b => {
-        const node = tpl.content.cloneNode(true);
-        const tr = node.querySelector('tr');
-        tr.dataset.id = b.id;
+        const frag = document.createDocumentFragment();
+        results.forEach((b) => {
+          const node = tpl.content.cloneNode(true);
+          const tr = node.querySelector("tr");
+          tr.dataset.id = b.id;
 
-        tr.children[0].querySelector('div').textContent = b.title;
-        tr.children[1].textContent = b.author || '—';
-        tr.children[2].textContent = b.year ?? '—';
+          tr.children[0].querySelector("div").textContent = b.title;
+          tr.children[1].textContent = b.author || "—";
+          tr.children[2].textContent = b.year ?? "—";
 
-        const chip = tr.querySelector('[data-status]');
-        chip.textContent = b.status;
-        statusPill(b.status).forEach(c => chip.classList.add(...c.split(' ')));
+          const chip = tr.querySelector("[data-status]");
+          chip.textContent = b.status;
+          statusPill(b.status).forEach((c) =>
+            chip.classList.add(...c.split(" "))
+          );
 
-        // Wire actions
-        const btns = node.querySelectorAll('button');
-        btns[0].dataset.action = 'edit';
-        btns[1].dataset.action = 'delete';
+          const btns = node.querySelectorAll("button");
+          btns[0].dataset.action = "edit";
+          btns[1].dataset.action = "delete";
 
-        frag.appendChild(node);
+          frag.appendChild(node);
+        });
+        rows.appendChild(frag);
+        updateStats();
+      }
+
+      // CRUD
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = idEl.value || uid();
+        const payload = {
+          id,
+          title: titleEl.value.trim(),
+          author: authorEl.value.trim(),
+          year: yearEl.value ? Number(yearEl.value) : null,
+          status: statusEl.value,
+          createdAt: books.find((b) => b.id === id)?.createdAt || Date.now(),
+          updatedAt: Date.now(),
+        };
+        if (books.some((b) => b.id === id)) {
+          books = books.map((b) => (b.id === id ? payload : b));
+        } else {
+          books.unshift(payload);
+        }
+        save();
+        render();
+        form.reset();
+        idEl.value = "";
+        submitLabel.textContent = "Add Book";
+        cancel.classList.add("hidden");
       });
-      rows.appendChild(frag);
-      updateStats();
-    }
 
-    // CRUD
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const id = idEl.value || uid();
-      const payload = {
-        id,
-        title: titleEl.value.trim(),
-        author: authorEl.value.trim(),
-        year: yearEl.value ? Number(yearEl.value) : null,
-        status: statusEl.value,
-        createdAt: books.find(b => b.id === id)?.createdAt || Date.now(),
-        updatedAt: Date.now(),
-      };
-      if (books.some(b => b.id === id)) {
-        books = books.map(b => b.id === id ? payload : b);
-      } else {
-        books.unshift(payload);
-      }
-      save();
+      cancel.addEventListener("click", () => {
+        idEl.value = "";
+        submitLabel.textContent = "Add Book";
+        cancel.classList.add("hidden");
+      });
+
+      rows.addEventListener("click", (e) => {
+        const btn = e.target.closest("button");
+        if (!btn) return;
+        const tr = btn.closest("tr");
+        const id = tr.dataset.id;
+
+        if (btn.dataset.action === "delete") {
+          books = books.filter((b) => b.id !== id);
+          save();
+          render();
+        }
+        if (btn.dataset.action === "edit") {
+          const b = books.find((b) => b.id === id);
+          idEl.value = b.id;
+          titleEl.value = b.title;
+          authorEl.value = b.author;
+          yearEl.value = b.year || "";
+          statusEl.value = b.status;
+          submitLabel.textContent = "Update Book";
+          cancel.classList.remove("hidden");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+      [search, sort, filterStatus].forEach((el) =>
+        el.addEventListener("input", render)
+      );
+
       render();
-      form.reset();
-      idEl.value = '';
-      submitLabel.textContent = 'Add Book';
-      cancel.classList.add('hidden');
-    });
-
-    cancel.addEventListener('click', () => {
-      idEl.value = '';
-      submitLabel.textContent = 'Add Book';
-      cancel.classList.add('hidden');
-    });
-
-    // Table actions (edit/delete)
-    rows.addEventListener('click', (e) => {
-      const btn = e.target.closest('button');
-      if (!btn) return;
-      const tr = btn.closest('tr');
-      const id = tr.dataset.id;
-
-      if (btn.dataset.action === 'delete') {
-        books = books.filter(b => b.id !== id);
-        save(); render();
-      }
-      if (btn.dataset.action === 'edit') {
-        const b = books.find(b => b.id === id);
-        idEl.value = b.id;
-        titleEl.value = b.title;
-        authorEl.value = b.author;
-        yearEl.value = b.year || '';
-        statusEl.value = b.status;
-        submitLabel.textContent = 'Update Book';
-        cancel.classList.remove('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    // Filters
-    [search, sort, filterStatus].forEach(el => el.addEventListener('input', render));
-
-    // Initial paint
-    render();
-  </script>
-</body>
+    </script>
+  </body>
 </html>

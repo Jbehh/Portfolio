@@ -1,287 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Notes — CRUD</title>
-  <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
-  <link href="./src/output.css" rel="stylesheet" />
-</head>
-<body class="min-h-dvh bg-gradient-to-b from-rose-50 via-fuchsia-50 to-indigo-50 text-slate-900 antialiased selection:bg-fuchsia-300/30">
-  <!-- Decorative background blobs -->
-  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-    <div class="absolute -top-24 -left-20 h-80 w-80 rounded-full bg-rose-300/25 blur-3xl"></div>
-    <div class="absolute top-10 right-[-6rem] h-96 w-96 rounded-full bg-fuchsia-300/25 blur-3xl"></div>
-    <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/25 blur-3xl"></div>
-  </div>
-
-  <!-- Header -->
-  <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-fuchsia-600 via-rose-600 to-indigo-600 text-white">
-    <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
-    <div class="relative mx-auto max-w-6xl px-4 py-10">
-      <div class="flex items-start gap-4">
-        <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
-          <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19 2H8a2 2 0 0 0-2 2v16l5-3 5 3V4h3a1 1 0 1 0 0-2zM6 4a2 2 0 0 1 2-2h9v14.764l-3-1.8-5 3V2H8A2 2 0 0 0 6 4z"/>
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Notes</h1>
-        </div>
-      </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Notes — CRUD</title>
+    <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
+    <link href="./src/output.css" rel="stylesheet" />
+  </head>
+  <body
+    class="min-h-dvh bg-gradient-to-b from-rose-50 via-fuchsia-50 to-indigo-50 text-slate-900 antialiased selection:bg-fuchsia-300/30"
+  >
+    <!-- Decorative background blobs -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-24 -left-20 h-80 w-80 rounded-full bg-rose-300/25 blur-3xl"></div>
+      <div class="absolute top-10 right-[-6rem] h-96 w-96 rounded-full bg-fuchsia-300/25 blur-3xl"></div>
+      <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-300/25 blur-3xl"></div>
     </div>
-  </header>
 
-  <!-- Main -->
-  <main class="mx-auto max-w-6xl px-4 py-8">
-    <!-- Form -->
-    <section class="rounded-2xl bg-white/85 shadow-sm ring-1 ring-white/50 backdrop-blur p-6">
-      <form id="noteForm" class="grid gap-4 md:grid-cols-6">
-        <input type="hidden" id="noteId" />
-        <div class="md:col-span-4">
-          <label class="block text-sm font-medium text-slate-800">Title</label>
-          <input id="title" required placeholder="Meeting notes"
-                 class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm
-                        focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300" />
+    <!-- Header -->
+    <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-fuchsia-600 via-rose-600 to-indigo-600 text-white">
+      <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
+      <div class="relative mx-auto max-w-6xl px-4 py-10">
+        <!-- Back button row -->
+        <div class="mb-5">
+          <a
+            id="backProjects"
+            href="../index.html"
+            title="Back to Projects"
+            aria-label="Back to Projects"
+            class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm backdrop-blur transition hover:border-white/40 hover:bg-white/15"
+          >
+            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20 11H7.83l4.59-4.59L11 5l-7 7 7 7 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            <span>Back to Projects</span>
+          </a>
         </div>
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-slate-800">Tag Color</label>
-          <select id="color"
-                  class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm
-                         focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300">
-            <option value="indigo">Indigo</option>
-            <option value="emerald">Emerald</option>
-            <option value="amber">Amber</option>
-            <option value="rose">Rose</option>
-            <option value="slate">Slate</option>
-          </select>
-        </div>
-        <div class="md:col-span-6">
-          <label class="block text-sm font-medium text-slate-800">Body</label>
-          <textarea id="body" rows="4" placeholder="What happened…"
-                    class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm
-                           focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300"></textarea>
-        </div>
-        <div class="md:col-span-6 flex flex-wrap items-center gap-3">
-          <button type="submit"
-                  class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-rose-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 active:brightness-95 transition">
-            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/></svg>
-            <span id="submitLabel">Add Note</span>
-          </button>
-          <button id="cancelEdit" type="reset"
-                  class="hidden rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">
-            Cancel
-          </button>
-          <div class="ml-auto relative w-full md:w-80">
-            <input id="search" placeholder="Search notes…"
-                   class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm
-                          focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300" />
-            <svg class="pointer-events-none absolute left-2 top-2.5 size-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"/>
+
+        <div class="flex items-start gap-4">
+          <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
+            <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M19 2H8a2 2 0 0 0-2 2v16l5-3 5 3V4h3a1 1 0 1 0 0-2zM6 4a2 2 0 0 1 2-2h9v14.764l-3-1.8-5 3V2H8A2 2 0 0 0 6 4z"/>
             </svg>
           </div>
-        </div>
-      </form>
-    </section>
-
-    <!-- Grid -->
-    <section id="grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></section>
-  </main>
-
-  <!-- Card Template -->
-  <template id="cardTpl">
-    <article class="group overflow-hidden rounded-2xl bg-white/90 backdrop-blur shadow ring-1 ring-white/60 transition hover:-translate-y-0.5 hover:shadow-md">
-      <!-- Accent bar -->
-      <div data-accent class="h-1 w-full bg-gradient-to-r"></div>
-
-      <div class="p-4 md:p-5">
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex items-start gap-3">
-            <span class="mt-1 size-3 shrink-0 rounded-full ring-2 ring-white" data-dot></span>
-            <div>
-              <h3 class="font-semibold tracking-tight"></h3>
-              <p class="mt-1 text-sm text-slate-600 line-clamp-3"></p>
-            </div>
+          <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Notes</h1>
           </div>
-          <div class="flex gap-2">
-            <button class="rounded-lg px-3 py-1.5 text-sm border border-slate-300 bg-white hover:bg-slate-50" data-action="edit">Edit</button>
-            <button class="rounded-lg px-3 py-1.5 text-sm bg-rose-600 text-white hover:bg-rose-500" data-action="delete">Delete</button>
-          </div>
-        </div>
-
-        <div class="mt-3 flex items-center gap-2 text-xs">
-          <span data-chip class="inline-flex items-center rounded-full px-2 py-1 ring-1"></span>
-          <span data-updated class="text-slate-500"></span>
         </div>
       </div>
-    </article>
-  </template>
+    </header>
 
-  <script>
-    const KEY = 'notes.v1';
-    let notes = JSON.parse(localStorage.getItem(KEY) || '[]');
+    <!-- Main -->
+    <main class="mx-auto max-w-6xl px-4 py-8">
+      <!-- Form -->
+      <section class="rounded-2xl bg-white/85 shadow-sm ring-1 ring-white/50 backdrop-blur p-6">
+        <form id="noteForm" class="grid gap-4 md:grid-cols-6">
+          <input type="hidden" id="noteId" />
+          <div class="md:col-span-4">
+            <label class="block text-sm font-medium text-slate-800">Title</label>
+            <input
+              id="title"
+              required
+              placeholder="Meeting notes"
+              class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-fuchsia-300"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-slate-800">Tag Color</label>
+            <select
+              id="color"
+              class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-rose-400 focus:border-rose-300"
+            >
+              <option value="indigo">Indigo</option>
+              <option value="emerald">Emerald</option>
+              <option value="amber">Amber</option>
+              <option value="rose">Rose</option>
+              <option value="slate">Slate</option>
+            </select>
+          </div>
+          <div class="md:col-span-6">
+            <label class="block text-sm font-medium text-slate-800">Body</label>
+            <textarea
+              id="body"
+              rows="4"
+              placeholder="What happened…"
+              class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-300"
+            ></textarea>
+          </div>
+          <div class="md:col-span-6 flex flex-wrap items-center gap-3">
+            <button
+              type="submit"
+              class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-fuchsia-600 via-rose-600 to-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 active:brightness-95 transition"
+            >
+              <svg class="size-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z" />
+              </svg>
+              <span id="submitLabel">Add Note</span>
+            </button>
+            <button
+              id="cancelEdit"
+              type="reset"
+              class="hidden rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50"
+            >
+              Cancel
+            </button>
+            <div class="ml-auto relative w-full md:w-80">
+              <input
+                id="search"
+                placeholder="Search notes…"
+                class="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 pl-9 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-400 focus:border-violet-300"
+              />
+              <svg class="pointer-events-none absolute left-2 top-2.5 size-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16a6.471 6.471 0 0 0 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM5 9.5C5 7 7 5 9.5 5S14 7 14 9.5 12 14 9.5 14 5 12 5 9.5z"/>
+              </svg>
+            </div>
+          </div>
+        </form>
+      </section>
 
-    // Elements
-    const form = document.getElementById('noteForm');
-    const idEl = document.getElementById('noteId');
-    const titleEl = document.getElementById('title');
-    const bodyEl = document.getElementById('body');
-    const colorEl = document.getElementById('color');
-    const submitLabel = document.getElementById('submitLabel');
-    const cancelEdit = document.getElementById('cancelEdit');
-    const search = document.getElementById('search');
-    const grid = document.getElementById('grid');
-    const tpl = document.getElementById('cardTpl');
+      <!-- Grid -->
+      <section id="grid" class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></section>
+    </main>
 
-    // Helpers
-    const save = () => localStorage.setItem(KEY, JSON.stringify(notes));
-    const uid = () => crypto.randomUUID();
+    <!-- Card Template -->
+    <template id="cardTpl">
+      <article class="group overflow-hidden rounded-2xl bg-white/90 backdrop-blur shadow ring-1 ring-white/60 transition hover:-translate-y-0.5 hover:shadow-md">
+        <!-- Accent bar -->
+        <div data-accent class="h-1 w-full bg-gradient-to-r"></div>
 
-    const colorMap = {
-      indigo: {
-        dot: 'bg-indigo-500',
-        chip: 'bg-indigo-100 text-indigo-800 ring-indigo-300',
-        bar:  'from-indigo-500 to-violet-500',
-      },
-      emerald: {
-        dot: 'bg-emerald-500',
-        chip: 'bg-emerald-100 text-emerald-800 ring-emerald-300',
-        bar:  'from-emerald-500 to-teal-500',
-      },
-      amber: {
-        dot: 'bg-amber-500',
-        chip: 'bg-amber-100 text-amber-900 ring-amber-300',
-        bar:  'from-amber-500 to-orange-500',
-      },
-      rose: {
-        dot: 'bg-rose-500',
-        chip: 'bg-rose-100 text-rose-800 ring-rose-300',
-        bar:  'from-rose-500 to-pink-500',
-      },
-      slate: {
-        dot: 'bg-slate-500',
-        chip: 'bg-slate-100 text-slate-800 ring-slate-300',
-        bar:  'from-slate-500 to-neutral-500',
-      }
-    };
-    const colorClass = c => (colorMap[c] || colorMap.slate).dot;
-    const chipClass  = c => (colorMap[c] || colorMap.slate).chip;
-    const barClass   = c => (colorMap[c] || colorMap.slate).bar;
+        <div class="p-4 md:p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <span class="mt-1 size-3 shrink-0 rounded-full ring-2 ring-white" data-dot></span>
+              <div>
+                <h3 class="font-semibold tracking-tight"></h3>
+                <p class="mt-1 text-sm text-slate-600 line-clamp-3"></p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="rounded-lg px-3 py-1.5 text-sm border border-slate-300 bg-white hover:bg-slate-50" data-action="edit">Edit</button>
+              <button class="rounded-lg px-3 py-1.5 text-sm bg-rose-600 text-white hover:bg-rose-500" data-action="delete">Delete</button>
+            </div>
+          </div>
 
-    function timeAgo(ms) {
-      const d = Date.now() - ms;
-      const s = Math.round(d / 1000);
-      if (s < 60) return 'Updated just now';
-      const m = Math.round(s / 60);
-      if (m < 60) return `Updated ${m}m ago`;
-      const h = Math.round(m / 60);
-      if (h < 24) return `Updated ${h}h ago`;
-      const days = Math.round(h / 24);
-      return `Updated ${days}d ago`;
-    }
+          <div class="mt-3 flex items-center gap-2 text-xs">
+            <span data-chip class="inline-flex items-center rounded-full px-2 py-1 ring-1"></span>
+            <span data-updated class="text-slate-500"></span>
+          </div>
+        </div>
+      </article>
+    </template>
 
-    // CRUD
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const id = idEl.value || uid();
-      const payload = {
-        id,
-        title: titleEl.value.trim(),
-        body: bodyEl.value.trim(),
-        color: colorEl.value,
-        createdAt: notes.find(n => n.id === id)?.createdAt || Date.now(),
-        updatedAt: Date.now(),
-      };
-      if (notes.some(n => n.id === id)) {
-        notes = notes.map(n => n.id === id ? payload : n);
-      } else {
-        notes.unshift(payload);
-      }
-      save(); render();
-      form.reset();
-      idEl.value = '';
-      submitLabel.textContent = 'Add Note';
-      cancelEdit.classList.add('hidden');
-    });
-
-    cancelEdit.addEventListener('click', () => {
-      idEl.value = '';
-      submitLabel.textContent = 'Add Note';
-      cancelEdit.classList.add('hidden');
-    });
-
-    grid.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      const card = btn.closest('article'); const id = card.dataset.id;
-      const action = btn.dataset.action;
-
-      if (action === 'delete') {
-        notes = notes.filter(n => n.id !== id);
-        save(); render();
-      }
-      if (action === 'edit') {
-        const n = notes.find(n => n.id === id);
-        idEl.value = n.id;
-        titleEl.value = n.title;
-        bodyEl.value = n.body;
-        colorEl.value = n.color;
-        submitLabel.textContent = 'Update Note';
-        cancelEdit.classList.remove('hidden');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    });
-
-    search.addEventListener('input', render);
-
-    // Render
-    function render(){
-      grid.innerHTML = '';
-      const q = search.value.trim().toLowerCase();
-
-      notes
-        .filter(n => !q || n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q))
-        .sort((a,b) => b.updatedAt - a.updatedAt)
-        .forEach(n => {
-          const node = tpl.content.cloneNode(true);
-          const card = node.querySelector('article');
-          card.dataset.id = n.id;
-
-          // Accent bar + dot + chip colorization
-          const bar = node.querySelector('[data-accent]');
-          bar.className = 'h-1 w-full bg-gradient-to-r ' + barClass(n.color);
-
-          const dot = node.querySelector('[data-dot]');
-          dot.className = 'mt-1 size-3 shrink-0 rounded-full ring-2 ring-white ' + colorClass(n.color);
-
-          const chip = node.querySelector('[data-chip]');
-          chip.textContent = n.color.charAt(0).toUpperCase() + n.color.slice(1);
-          chip.className = 'inline-flex items-center rounded-full px-2 py-1 ring-1 ' + chipClass(n.color);
-
-          // Content
-          node.querySelector('h3').textContent = n.title;
-          node.querySelector('p').textContent  = n.body || '—';
-
-          // Updated badge
-          node.querySelector('[data-updated]').textContent = timeAgo(n.updatedAt);
-
-          grid.appendChild(node);
+    <script>
+      // Smart Back: go back if referrer is same origin; else open ../index.html
+      (function () {
+        const link = document.getElementById('backProjects');
+        if (!link) return;
+        link.addEventListener('click', function (e) {
+          try {
+            const ref = document.referrer ? new URL(document.referrer) : null;
+            if (ref && ref.origin === location.origin && history.length > 1) {
+              e.preventDefault();
+              history.back();
+            }
+          } catch (_) { /* no-op */ }
         });
+      })();
 
-      // Empty state
-      if (!grid.children.length) {
-        const empty = document.createElement('div');
-        empty.className = 'col-span-full rounded-2xl border border-dashed border-white/60 bg-white/70 p-10 text-center text-slate-500';
-        empty.innerHTML = `
+      const KEY = "notes.v1";
+      let notes = JSON.parse(localStorage.getItem(KEY) || "[]");
+
+      // Elements
+      const form = document.getElementById("noteForm");
+      const idEl = document.getElementById("noteId");
+      const titleEl = document.getElementById("title");
+      const bodyEl = document.getElementById("body");
+      const colorEl = document.getElementById("color");
+      const submitLabel = document.getElementById("submitLabel");
+      const cancelEdit = document.getElementById("cancelEdit");
+      const search = document.getElementById("search");
+      const grid = document.getElementById("grid");
+      const tpl = document.getElementById("cardTpl");
+
+      // Helpers
+      const save = () => localStorage.setItem(KEY, JSON.stringify(notes));
+      const uid = () => crypto.randomUUID();
+
+      const colorMap = {
+        indigo: { dot: "bg-indigo-500", chip: "bg-indigo-100 text-indigo-800 ring-indigo-300", bar: "from-indigo-500 to-violet-500" },
+        emerald: { dot: "bg-emerald-500", chip: "bg-emerald-100 text-emerald-800 ring-emerald-300", bar: "from-emerald-500 to-teal-500" },
+        amber: { dot: "bg-amber-500", chip: "bg-amber-100 text-amber-900 ring-amber-300", bar: "from-amber-500 to-orange-500" },
+        rose: { dot: "bg-rose-500", chip: "bg-rose-100 text-rose-800 ring-rose-300", bar: "from-rose-500 to-pink-500" },
+        slate: { dot: "bg-slate-500", chip: "bg-slate-100 text-slate-800 ring-slate-300", bar: "from-slate-500 to-neutral-500" },
+      };
+      const colorClass = (c) => (colorMap[c] || colorMap.slate).dot;
+      const chipClass = (c) => (colorMap[c] || colorMap.slate).chip;
+      const barClass = (c) => (colorMap[c] || colorMap.slate).bar;
+
+      function timeAgo(ms) {
+        const d = Date.now() - ms;
+        const s = Math.round(d / 1000);
+        if (s < 60) return "Updated just now";
+        const m = Math.round(s / 60);
+        if (m < 60) return `Updated ${m}m ago`;
+        const h = Math.round(m / 60);
+        if (h < 24) return `Updated ${h}h ago`;
+        const days = Math.round(h / 24);
+        return `Updated ${days}d ago`;
+      }
+
+      // CRUD
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = idEl.value || uid();
+        const payload = {
+          id,
+          title: titleEl.value.trim(),
+          body: bodyEl.value.trim(),
+          color: colorEl.value,
+          createdAt: notes.find((n) => n.id === id)?.createdAt || Date.now(),
+          updatedAt: Date.now(),
+        };
+        if (notes.some((n) => n.id === id)) {
+          notes = notes.map((n) => (n.id === id ? payload : n));
+        } else {
+          notes.unshift(payload);
+        }
+        save();
+        render();
+        form.reset();
+        idEl.value = "";
+        submitLabel.textContent = "Add Note";
+        cancelEdit.classList.add("hidden");
+      });
+
+      cancelEdit.addEventListener("click", () => {
+        idEl.value = "";
+        submitLabel.textContent = "Add Note";
+        cancelEdit.classList.add("hidden");
+      });
+
+      grid.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const card = btn.closest("article");
+        const id = card.dataset.id;
+        const action = btn.dataset.action;
+
+        if (action === "delete") {
+          notes = notes.filter((n) => n.id !== id);
+          save();
+          render();
+        }
+        if (action === "edit") {
+          const n = notes.find((n) => n.id === id);
+          idEl.value = n.id;
+          titleEl.value = n.title;
+          bodyEl.value = n.body;
+          colorEl.value = n.color;
+          submitLabel.textContent = "Update Note";
+          cancelEdit.classList.remove("hidden");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+
+      search.addEventListener("input", render);
+
+      // Render
+      function render() {
+        grid.innerHTML = "";
+        const q = search.value.trim().toLowerCase();
+
+        notes
+          .filter((n) => !q || n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q))
+          .sort((a, b) => b.updatedAt - a.updatedAt)
+          .forEach((n) => {
+            const node = tpl.content.cloneNode(true);
+            const card = node.querySelector("article");
+            card.dataset.id = n.id;
+
+            const bar = node.querySelector("[data-accent]");
+            bar.className = "h-1 w-full bg-gradient-to-r " + barClass(n.color);
+
+            const dot = node.querySelector("[data-dot]");
+            dot.className = "mt-1 size-3 shrink-0 rounded-full ring-2 ring-white " + colorClass(n.color);
+
+            const chip = node.querySelector("[data-chip]");
+            chip.textContent = n.color.charAt(0).toUpperCase() + n.color.slice(1);
+            chip.className = "inline-flex items-center rounded-full px-2 py-1 ring-1 " + chipClass(n.color);
+
+            node.querySelector("h3").textContent = n.title;
+            node.querySelector("p").textContent = n.body || "—";
+            node.querySelector("[data-updated]").textContent = timeAgo(n.updatedAt);
+
+            grid.appendChild(node);
+          });
+
+        if (!grid.children.length) {
+          const empty = document.createElement("div");
+          empty.className = "col-span-full rounded-2xl border border-dashed border-white/60 bg-white/70 p-10 text-center text-slate-500";
+          empty.innerHTML = `
           <div class="mx-auto mb-3 grid size-10 place-items-center rounded-xl bg-gradient-to-r from-rose-100 to-indigo-100 text-fuchsia-600 ring-1 ring-white/60">
             <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/></svg>
           </div>
           <p class="text-sm">No notes yet. Add your first one above.</p>`;
-        grid.appendChild(empty);
+          grid.appendChild(empty);
+        }
       }
-    }
 
-    render();
-  </script>
-</body>
+      render();
+    </script>
+  </body>
 </html>
