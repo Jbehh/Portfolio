@@ -36,14 +36,21 @@
           <a
             id="backProjects"
             href="../index.html"
-            title="Back to My Portfolio"
-            aria-label="Back to My Portfolio"
+            title="Back to Projects"
+            aria-label="Back to Projects"
             class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white shadow-sm backdrop-blur transition hover:border-white/40 hover:bg-white/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           >
-            <svg class="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M20 11H7.83l4.59-4.59L11 5l-7 7 7 7 1.41-1.41L7.83 13H20v-2z"/>
+            <svg
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M20 11H7.83l4.59-4.59L11 5l-7 7 7 7 1.41-1.41L7.83 13H20v-2z"
+              />
             </svg>
-            <span>Back to My Portfolio</span>
+            <span>Back to Projects</span>
           </a>
         </div>
 
@@ -305,16 +312,18 @@
     <!-- Smart Back script -->
     <script>
       (function () {
-        const link = document.getElementById('backProjects');
+        const link = document.getElementById("backProjects");
         if (!link) return;
-        link.addEventListener('click', function (e) {
+        link.addEventListener("click", function (e) {
           try {
             const ref = document.referrer ? new URL(document.referrer) : null;
             if (ref && ref.origin === location.origin && history.length > 1) {
               e.preventDefault();
               history.back();
             }
-          } catch (_) { /* no-op */ }
+          } catch (_) {
+            /* no-op */
+          }
         });
       })();
     </script>
