@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Projects</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e5e7eb;
+      --surface: #ffffff;
+      --card: #f8fafc;
+      --accent: #6366f1;   /* indigo-500 */
+      --accent-2: #f43f5e; /* rose-500  */
+      --ring: color-mix(in oklab, var(--accent) 35%, black);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1020;
+        --text: #e5e7eb;
+        --muted: #9aa4b2;
+        --border: #1f2937;
+        --surface: #0f172a;
+        --card: #111827;
+        --ring: color-mix(in oklab, var(--accent) 50%, white);
+      }
+    }
+
+    /* Page */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, color-mix(in oklab, var(--accent) 16%, transparent), transparent),
+        radial-gradient(1200px 600px at 110% -20%, color-mix(in oklab, var(--accent-2) 16%, transparent), transparent),
+        var(--bg);
+      color: var(--text);
+    }
+
+    /* Header */
+    header {
+      padding: clamp(40px, 6vw, 72px) 20px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: white;
+      position: relative;
+      overflow: clip;
+      isolation: isolate;
+    }
+    header::after {
+      content: "";
+      position: absolute; inset: -20% -10% auto -10%;
+      height: 120%;
+      background:
+        radial-gradient(600px 240px at 20% 0%, #ffffff22, transparent 60%),
+        radial-gradient(500px 220px at 80% 0%, #ffffff22, transparent 60%);
+      z-index: -1;
+      filter: blur(1px);
+    }
+    .header-wrap {
+      max-width: 1000px; margin: 0 auto;
+    }
+    .title {
+      margin: 0 0 8px 0;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      margin: 0;
+      opacity: .95;
+      font-size: clamp(14px, 1.8vw, 18px);
+    }
+
+    /* Main */
+    main { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    /* Card */
+    .card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 0%), var(--surface));
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      box-shadow:
+        0 1px 2px rgba(0,0,0,.04),
+        0 8px 20px rgba(0,0,0,.06);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+      position: relative;
+    }
+    .card:hover { transform: translateY(-3px); border-color: color-mix(in oklab, var(--accent) 40%, var(--border)); }
+    .card:focus-visible {
+      outline: 3px solid transparent;
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--ring), transparent 45%), 0 1px 2px rgba(0,0,0,.04), 0 8px 20px rgba(0,0,0,.06);
+    }
+
+    .card-head {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .icon {
+      width: 36px; height: 36px; border-radius: 12px;
+      display: grid; place-items: center; flex-shrink: 0;
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: inset 0 0 0 1px #ffffff22, 0 8px 16px rgba(0,0,0,.12);
+    }
+    .card h3 {
+      font-size: 1.05rem; margin: 0; letter-spacing: -.01em;
+    }
+    .desc {
+      margin: 0; color: var(--muted); line-height: 1.45;
+      font-size: .95rem;
+    }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+    .chip {
+      font-size: 12px; padding: 6px 10px; border-radius: 999px;
+      background: color-mix(in oklab, var(--accent) 12%, transparent);
+      color: color-mix(in oklab, var(--accent) 65%, var(--text));
+      border: 1px solid color-mix(in oklab, var(--accent) 26%, var(--border));
+    }
+
+    .cta {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 8px;
+      font-weight: 600; font-size: .95rem;
+      color: color-mix(in oklab, var(--accent) 60%, var(--text));
+    }
+    .cta svg { transition: transform .18s ease; }
+    .card:hover .cta svg { transform: translateX(4px); }
+
+    /* Footer */
+    footer { text-align: center; padding: 28px; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-wrap">
+      <h1 class="title">My Projects</h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid">
+      <a class="card" href="./task-manager/index.html">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">
+            <!-- checklist icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M9 11l3 3L22 4l-2-2-8 8-3-3-2 2zm-4 9h14v-2H5v2zm0-6h14v-2H5v2z"/></svg>
+          </div>
+          <h3>Task Manager</h3>
+        </div>
+        <p class="desc">CRUD with priorities, due dates, filters, and persistent storage.</p>
+        <div class="chips">
+          <span class="chip">CRUD</span><span class="chip">Filters</span><span class="chip">LocalStorage</span>
+        </div>
+        <span class="cta">Open
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="./notes-app/index.html">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">
+            <!-- note icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16l4-4h10a2 2 0 0 0 2-2V6l-6-4zM8 9h8v2H8V9zm0 4h5v2H8v-2z"/></svg>
+          </div>
+          <h3>Notes App</h3>
+        </div>
+        <p class="desc">Lightweight notes with color tags, search, and inline editing.</p>
+        <div class="chips">
+          <span class="chip">CRUD</span><span class="chip">Tags</span><span class="chip">Search</span>
+        </div>
+        <span class="cta">Open
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="./contacts-manager/index.html">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">
+            <!-- users icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.67 0-8 1.34-8 4v2h10v-2c0-2.66-5.33-4-8-4zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.98 1.97 3.45v2H24v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <h3>Contacts Manager</h3>
+        </div>
+        <p class="desc">Manage people with email & phone validation in a clean table UI.</p>
+        <div class="chips">
+          <span class="chip">CRUD</span><span class="chip">Validation</span><span class="chip">Table</span>
+        </div>
+        <span class="cta">Open
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="./expense-tracker/index.html">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">
+            <!-- chart icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 3h2v18H3V3zm4 10h2v8H7v-8zm4-6h2v14h-2V7zm4 4h2v10h-2V11zm4-8h2v18h-2V3z"/></svg>
+          </div>
+          <h3>Expense Tracker</h3>
+        </div>
+        <p class="desc">Track spending by category with running totals and currency formatting.</p>
+        <div class="chips">
+          <span class="chip">CRUD</span><span class="chip">Totals</span><span class="chip">PHP</span>
+        </div>
+        <span class="cta">Open
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="./book-library/index.html">
+        <div class="card-head">
+          <div class="icon" aria-hidden="true">
+            <!-- book icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2H8a2 2 0 0 0-2 2v16a4 4 0 0 1 4-4h10V4a2 2 0 0 0-2-2zm-2 12H10a2 2 0 0 0-2 2V4h8v10z"/></svg>
+          </div>
+          <h3>Book Library</h3>
+        </div>
+        <p class="desc">Track owned/reading/finished, with sorting and quick search.</p>
+        <div class="chips">
+          <span class="chip">CRUD</span><span class="chip">Status</span><span class="chip">Sorting</span>
+        </div>
+        <span class="cta">Open
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 5l7 7-7 7v-4H4v-6h9V5z"/></svg>
+        </span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

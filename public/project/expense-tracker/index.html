@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Expense Tracker — CRUD</title>
+  <!-- Build with: npx tailwindcss@4.1.0 -i ./src/input.css -o ./src/output.css --minify -->
+  <link href="./src/output.css" rel="stylesheet" />
+</head>
+<body class="min-h-dvh bg-gradient-to-b from-emerald-50 via-cyan-50 to-teal-50 text-neutral-900 antialiased selection:bg-emerald-300/30">
+  <!-- Decorative background blobs -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -top-24 -left-24 h-80 w-80 rounded-full bg-emerald-300/25 blur-3xl"></div>
+    <div class="absolute top-16 right-[-6rem] h-96 w-96 rounded-full bg-teal-300/25 blur-3xl"></div>
+    <div class="absolute bottom-[-6rem] left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-cyan-300/25 blur-3xl"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="relative isolate border-b border-white/40 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white">
+    <div class="absolute inset-0 bg-[radial-gradient(60%_50%_at_20%_0%,rgba(255,255,255,.2),transparent_60%)]"></div>
+    <div class="relative mx-auto max-w-5xl px-4 py-10">
+      <div class="flex items-start gap-4">
+        <div class="grid size-12 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/25 backdrop-blur">
+          <svg class="size-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M3 6h18v2H3V6zm0 5h18v7H3v-7zm2 2v3h6v-3H5z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Expense Tracker</h1>
+          <p class="mt-2 text-white/90">Track spending by category with running totals. CRUD + LocalStorage.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-5xl px-4 py-8 space-y-6">
+    <!-- Form -->
+    <section class="rounded-2xl bg-white/85 backdrop-blur shadow-sm ring-1 ring-white/50 p-6">
+      <form id="expForm" class="grid gap-4 md:grid-cols-8">
+        <input type="hidden" id="eid" />
+        <div class="md:col-span-3">
+          <label class="block text-sm font-medium text-neutral-800">Description</label>
+          <input id="desc" required placeholder="Groceries"
+                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
+                        focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-300" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-neutral-800">Amount</label>
+          <input id="amount" type="number" step="0.01" min="0" required placeholder="0.00"
+                 class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
+                        focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-300" />
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-neutral-800">Category</label>
+          <select id="cat"
+                  class="mt-1 w-full rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm shadow-sm
+                         focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-300">
+            <option>Food</option>
+            <option>Transport</option>
+            <option>Rent</option>
+            <option>Utilities</option>
+            <option>Fun</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="md:col-span-1 flex items-end">
+          <button type="submit"
+                  class="w-full rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-4 py-2 text-sm font-semibold text-white shadow hover:brightness-110 active:brightness-95 transition">
+            <span id="submitLabel">Add</span>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Stats -->
+    <section class="grid gap-6 md:grid-cols-3">
+      <div class="rounded-2xl bg-white/80 p-5 ring-1 ring-emerald-200 shadow-sm backdrop-blur">
+        <div class="h-1 w-12 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"></div>
+        <h3 class="mt-3 text-sm text-neutral-600">Total Spent</h3>
+        <p id="total" class="mt-2 text-3xl font-bold">₱0.00</p>
+        <p id="avg" class="mt-1 text-xs text-neutral-500">Avg per item: ₱0.00</p>
+      </div>
+      <div class="rounded-2xl bg-white/80 p-5 ring-1 ring-cyan-200 shadow-sm backdrop-blur md:col-span-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm text-neutral-600">By Category</h3>
+          <span id="catCount" class="text-xs text-neutral-500"></span>
+        </div>
+        <div id="byCat" class="mt-3 grid grid-cols-1 gap-2"></div>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="overflow-x-auto rounded-2xl bg-white/90 ring-1 ring-white/50 backdrop-blur">
+      <table class="min-w-full text-sm">
+        <thead class="bg-gradient-to-r from-emerald-50 via-cyan-50 to-teal-50 text-neutral-700 ring-1 ring-white/50">
+          <tr>
+            <th class="px-4 py-3 text-left font-medium">Description</th>
+            <th class="px-4 py-3 text-left font-medium">Category</th>
+            <th class="px-4 py-3 text-right font-medium">Amount</th>
+            <th class="px-4 py-3 text-right font-medium">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rows" class="divide-y divide-neutral-100"></tbody>
+      </table>
+
+      <!-- Empty state -->
+      <div id="empty" class="hidden p-10 text-center text-neutral-500">
+        <div class="mx-auto mb-3 grid size-10 place-items-center rounded-xl bg-gradient-to-r from-emerald-100 to-cyan-100 text-emerald-700 ring-1 ring-white/60">
+          <svg class="size-5" viewBox="0 0 24 24" fill="currentColor"><path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2z"/></svg>
+        </div>
+        <p class="text-sm">No expenses yet. Add your first one above.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Row Template -->
+  <template id="rowTpl">
+    <tr class="hover:bg-gradient-to-r hover:from-emerald-50/70 hover:via-cyan-50/70 hover:to-teal-50/70 transition">
+      <td class="px-4 py-3 font-medium text-neutral-900"></td>
+      <td class="px-4 py-3">
+        <span data-chip class="inline-flex items-center rounded-full px-2 py-1 text-xs ring-1"></span>
+      </td>
+      <td class="px-4 py-3 text-right font-medium text-neutral-900"></td>
+      <td class="px-4 py-3">
+        <div class="flex justify-end gap-2">
+          <button class="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-semibold hover:bg-neutral-50" data-action="edit">Edit</button>
+          <button class="rounded-md bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500" data-action="delete">Delete</button>
+        </div>
+      </td>
+    </tr>
+  </template>
+
+  <script>
+    const KEY='expenses.v1';
+    let items = JSON.parse(localStorage.getItem(KEY) || '[]');
+
+    // Elements
+    const form = document.getElementById('expForm');
+    const idEl = document.getElementById('eid');
+    const desc = document.getElementById('desc');
+    const amount = document.getElementById('amount');
+    const cat = document.getElementById('cat');
+    const submitLabel = document.getElementById('submitLabel');
+
+    const rows = document.getElementById('rows');
+    const tpl = document.getElementById('rowTpl');
+    const total = document.getElementById('total');
+    const avg = document.getElementById('avg');
+    const byCat = document.getElementById('byCat');
+    const catCount = document.getElementById('catCount');
+    const empty = document.getElementById('empty');
+
+    // Helpers
+    const save = () => localStorage.setItem(KEY, JSON.stringify(items));
+    const uid = () => crypto.randomUUID();
+    const peso = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP' });
+
+    const catStyle = (c) => ({
+      Food:      ['bg-emerald-100 text-emerald-800 ring-emerald-300'],
+      Transport: ['bg-cyan-100 text-cyan-800 ring-cyan-300'],
+      Rent:      ['bg-teal-100 text-teal-800 ring-teal-300'],
+      Utilities: ['bg-amber-100 text-amber-900 ring-amber-300'],
+      Fun:       ['bg-fuchsia-100 text-fuchsia-800 ring-fuchsia-300'],
+      Other:     ['bg-slate-100 text-slate-800 ring-slate-300'],
+    }[c] || ['bg-slate-100 text-slate-800 ring-slate-300']);
+
+    function barClassesFor(c){
+      return ({
+        Food:      'from-emerald-400 to-emerald-300',
+        Transport: 'from-cyan-400 to-cyan-300',
+        Rent:      'from-teal-400 to-teal-300',
+        Utilities: 'from-amber-400 to-orange-300',
+        Fun:       'from-fuchsia-400 to-pink-300',
+        Other:     'from-slate-400 to-neutral-300',
+      }[c] || 'from-slate-400 to-neutral-300');
+    }
+
+    // CRUD
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const id = idEl.value || uid();
+      const payload = {
+        id,
+        desc: desc.value.trim(),
+        amount: parseFloat(amount.value),
+        cat: cat.value,
+        createdAt: items.find(i=>i.id===id)?.createdAt || Date.now(),
+        updatedAt: Date.now(),
+      };
+      if (!isFinite(payload.amount)) { alert('Enter a valid amount.'); return; }
+      if (items.some(i=>i.id===id)) items = items.map(i=>i.id===id?payload:i); else items.unshift(payload);
+      save(); render(); form.reset(); idEl.value=''; submitLabel.textContent='Add';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    rows.addEventListener('click',(e)=>{
+      const btn = e.target.closest('[data-action]'); if(!btn) return; const tr = btn.closest('tr'); const id = tr.dataset.id;
+      if(btn.dataset.action==='delete'){ items = items.filter(i=>i.id!==id); save(); render(); }
+      if(btn.dataset.action==='edit'){
+        const i = items.find(i=>i.id===id);
+        idEl.value=i.id; desc.value=i.desc; amount.value=i.amount; cat.value=i.cat; submitLabel.textContent='Update';
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+    });
+
+    // Render
+    function render(){
+      // Table
+      rows.innerHTML='';
+      const sorted = [...items].sort((a,b)=>b.updatedAt-a.updatedAt);
+      empty.classList.toggle('hidden', sorted.length !== 0);
+
+      sorted.forEach(i=>{
+        const node = tpl.content.cloneNode(true);
+        const tr = node.querySelector('tr'); tr.dataset.id=i.id;
+        tr.children[0].textContent=i.desc;
+
+        // Category chip
+        const chip = tr.querySelector('[data-chip]');
+        chip.textContent = i.cat;
+        catStyle(i.cat).forEach(c=>chip.classList.add(...c.split(' ')));
+
+        tr.children[2].textContent=peso.format(i.amount);
+        rows.appendChild(node);
+      });
+
+      // Totals
+      const sum = items.reduce((acc,i)=>acc+i.amount,0);
+      total.textContent = peso.format(sum);
+      const avgVal = items.length ? sum / items.length : 0;
+      avg.textContent = `Avg per item: ${peso.format(avgVal)}`;
+
+      // By category bars
+      const groups = items.reduce((acc,i)=>{ acc[i.cat]=(acc[i.cat]||0)+i.amount; return acc; },{});
+      const entries = Object.entries(groups).sort((a,b)=>b[1]-a[1]);
+      byCat.innerHTML='';
+      catCount.textContent = entries.length ? `${entries.length} categories` : '';
+      entries.forEach(([k,v])=>{
+        const pct = sum ? Math.round((v/sum)*100) : 0;
+        const row = document.createElement('div');
+        row.className='rounded-xl border border-white/60 bg-white/70 p-3 shadow-sm';
+        row.innerHTML = `
+          <div class="flex items-center justify-between text-sm">
+            <span class="font-medium text-neutral-800">${k}</span>
+            <span class="font-semibold">${peso.format(v)}</span>
+          </div>
+          <div class="mt-2 h-2 w-full overflow-hidden rounded-full bg-neutral-100 ring-1 ring-neutral-200">
+            <div class="h-full bg-gradient-to-r ${barClassesFor(k)}" style="width:${pct}%;"></div>
+          </div>
+          <div class="mt-1 text-right text-[11px] text-neutral-500">${pct}% of total</div>
+        `;
+        byCat.appendChild(row);
+      });
+
+      // Empty "By Category" state
+      if (!entries.length) {
+        const emptyCat = document.createElement('div');
+        emptyCat.className = 'rounded-xl border border-dashed border-white/60 bg-white/60 p-6 text-center text-sm text-neutral-500';
+        emptyCat.textContent = 'No category data yet.';
+        byCat.appendChild(emptyCat);
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
