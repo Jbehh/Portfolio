@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Firstname Lastname — Portfolio</title>
+    <meta
+      name="description"
+      content="Professional fresh graduate portfolio with clean code, modular JS, and Tailwind CSS v4.1."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./output.css" />
+
+    <script>
+      // Early theme set to avoid FOUC
+      (function () {
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        document.documentElement.classList.toggle(
+          "dark",
+          saved ? saved === "dark" : prefersDark
+        );
+      })();
+    </script>
+  </head>
+  <body
+    class="font-sans text-slate-800 dark:text-slate-200 bg-gradient-to-br from-slate-50 via-white to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950"
+  >
+    <!-- NAV -->
+    <header
+      class="sticky top-0 z-50 bg-white/70 dark:bg-slate-950/60 backdrop-blur border-b border-white/30 dark:border-slate-800/60"
+    >
+      <nav
+        class="container-px mx-auto max-w-6xl h-16 flex items-center justify-between"
+      >
+        <a
+          href="#"
+          class="flex items-center gap-2 font-extrabold tracking-tight"
+        >
+          <span
+            class="inline-block size-3 rounded-full bg-brand-gradient"
+          ></span>
+          Jeffrey Balane
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a class="hover:text-brand-600" href="#about">About</a>
+          <a class="hover:text-brand-600" href="#education">Education</a>
+          <a class="hover:text-brand-600" href="#experience">Experience</a>
+          <a class="hover:text-brand-600" href="#skills">Skills</a>
+          <a class="hover:text-brand-600" href="#certificates">Certificates</a>
+          <a class="hover:text-brand-600" href="#references">References</a>
+          <a class="hover:text-brand-600" href="#contact">Contact</a>
+          <button
+            id="themeToggle"
+            class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-soft"
+          >
+            🌓
+          </button>
+          <a
+            href="../Assets/Jeffrey Balane (Front - End Developer).pdf.pdf"
+            download
+            class="px-4 py-2 rounded-xl bg-brand-gradient text-white shadow-soft"
+            >Download CV</a
+          >
+        </div>
+        <button
+          id="menuBtn"
+          class="md:hidden p-2 rounded-lg border border-slate-200 dark:border-slate-700"
+        >
+          ☰
+        </button>
+      </nav>
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/90 backdrop-blur"
+      >
+        <div
+          class="container-px mx-auto max-w-6xl py-3 grid grid-cols-2 gap-2 text-sm"
+        >
+          <a class="py-2" href="#about">About</a>
+          <a class="py-2" href="#education">Education</a>
+          <a class="py-2" href="#experience">Experience</a>
+          <a class="py-2" href="#skills">Skills</a>
+          <a class="py-2" href="#certificates">Certificates</a>
+          <a class="py-2" href="#references">References</a>
+          <a class="py-2" href="#contact">Contact</a>
+          <a
+            class="py-2"
+            href="../Assets/Jeffrey Balane (Front - End Developer).pdf.pdf"
+            >Download CV</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <!-- HERO / ABOUT -->
+    <section
+      id="about"
+      class="container-px mx-auto max-w-6xl pt-14 pb-10 md:pt-20 md:pb-16"
+    >
+      <div class="grid md:grid-cols-5 gap-10 items-center">
+        <div class="md:col-span-3 space-y-6">
+          <span
+            class="inline-flex items-center gap-2 text-xs font-semibold tracking-wide uppercase text-slate-600 dark:text-slate-400"
+          >
+            <span
+              class="inline-block size-2 rounded-full bg-emerald-500"
+            ></span>
+            Fresh Graduate • Open to Frontend / QA Manual Tester
+          </span>
+          <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight">
+            Hi, I’m
+            <span class="bg-clip-text text-transparent bg-brand-gradient"
+              >Jeffrey</span
+            >
+            —
+            <span
+              id="typeTarget"
+              class="text-transparent bg-clip-text bg-brand-gradient"
+              >building fast, accessible web apps</span
+            >.
+          </h1>
+          <p
+            class="text-slate-600 dark:text-slate-300 max-w-prose"
+            id="aboutText"
+          >
+            Passionate developer with a knack for translating real-world
+            problems into clean, user-friendly interfaces. I care about code
+            quality, teamwork, and measurable impact.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a
+              href="#projects"
+              class="px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white shadow-soft"
+              >See work</a
+            >
+            <a
+              href="#contact"
+              class="px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-soft"
+              >Get in touch</a
+            >
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+            <div class="glass rounded-2xl p-4 text-center">
+              <div class="text-2xl font-bold" data-counter="12">0</div>
+              <div class="text-xs text-slate-500">Projects</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center">
+              <div class="text-2xl font-bold" data-counter="1">0</div>
+              <div class="text-xs text-slate-500">Internships</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center">
+              <div class="text-2xl font-bold" data-counter="5">0</div>
+              <div class="text-xs text-slate-500">Certificates</div>
+            </div>
+            <div class="glass rounded-2xl p-4 text-center">
+              <div class="text-2xl font-bold" data-counter="100">0</div>
+              <div class="text-xs text-slate-500">% Effort 😄</div>
+            </div>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <div class="relative">
+            <div
+              class="absolute -inset-1 rounded-3xl bg-brand-gradient blur opacity-30"
+            ></div>
+            <div class="relative glass rounded-3xl p-8">
+              <img
+                src="../Assets/My Picture.jpg"
+                alt="Profile photo"
+                class="rounded-2xl w-full h-64 object-cover mb-4"
+              />
+              <h2 class="text-xl font-semibold">Jeffrey Balane</h2>
+              <p class="text-sm text-slate-500 dark:text-slate-400">
+                BS in Computer Science, STI College Caloocan, 2024
+              </p>
+              <div class="flex gap-3 pt-3 justify-center">
+                <a
+                  href="https://www.linkedin.com/in/jeffrey-balane-1b1396317/"
+                  class="text-indigo-600 hover:underline"
+                  >LinkedIn</a
+                >
+                <a
+                  href="https://github.com/Jbehh"
+                  class="text-indigo-600 hover:underline"
+                  >GitHub</a
+                >
+              </div>
+              <div class="mt-4 space-y-3">
+                <div>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span>Html</span><span>Intermediate</span>
+                  </div>
+                  <div
+                    class="h-2 rounded bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                  >
+                    <div
+                      class="h-full bg-gradient-to-r from-brand-600 via-emerald-500 to-warm-500"
+                      data-progress="80"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span>Tailwind</span><span>Intermediate</span>
+                  </div>
+                  <div
+                    class="h-2 rounded bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                  >
+                    <div
+                      class="h-full bg-gradient-to-r from-brand-600 via-emerald-500 to-warm-500"
+                      data-progress="70"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span>Javascript</span><span>Intermediate</span>
+                  </div>
+                  <div
+                    class="h-2 rounded bg-slate-200 dark:bg-slate-800 overflow-hidden"
+                  >
+                    <div
+                      class="h-full bg-gradient-to-r from-brand-600 via-emerald-500 to-warm-500"
+                      data-progress="65"
+                      style="width: 0%"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section id="education" class="container-px mx-auto max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">Education</h2>
+      <ul class="mt-4 space-y-3 text-slate-700 dark:text-slate-300">
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <strong
+            >BS in Computer Science — STI College Caloocan (2020–2024)</strong
+          >
+          <ul class="list-disc pl-5 text-sm mt-2">
+            <li>Graduated with Latin Honors</li>
+            <li>Thesis: Front - End and Quality Assurance</li>
+          </ul>
+        </li>
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <strong>STEM — STI College Caloocan (2018 - 2020)</strong>
+          <ul class="list-disc pl-5 text-sm mt-2">
+            <li>
+              Applied problem-solving skills through hands-on projects and
+              experiments
+            </li>
+            <li>
+              Built a strong foundation in science, technology, engineering, and
+              math (STEM)
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="container-px mx-auto max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">Relevant Experience</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <article class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold">
+            GO8 TECHNOLOGY INC. (REMOTE) | FRONT-END DEVELOPER (INTERN) (MARCH
+            2024 – MAY 2024)
+          </h3>
+          <ul
+            class="mt-2 text-sm list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300"
+          >
+            <li>
+              Built website interfaces with HTML, CSS, JavaScript, Tailwind,
+              DaisyUI, Flowbite, PHP, and Laravel
+            </li>
+            <li>
+              Enhanced front-end functionality and performance through
+              real-world projects
+            </li>
+            <li>
+              Boosted user engagement and experience with creative, responsive
+              designs.
+            </li>
+          </ul>
+        </article>
+        <article class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold">
+            STI COLLEGE CALOOCAN | CAPSTONE PROJECT – FRONT-END DEVELOPER
+            (2023–2024)
+          </h3>
+          <ul
+            class="mt-2 text-sm list-disc pl-5 space-y-1 text-slate-600 dark:text-slate-300"
+          >
+            <li>
+              Built a secure, responsive website with HTML, CSS, JavaScript,
+              Tailwind, PHP, and Laravel.
+            </li>
+            <li>
+              Optimized performance and usability through debugging and
+              improvements.
+            </li>
+            <li>
+              Applied web security and UX principles in real-world projects.
+            </li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="container-px mx-auto max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">Skills</h2>
+      <div class="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold text-center">Frontend</h3>
+          <p class="text-sm text-slate-500 text-center">
+            HTML, Tailwind, CSS, JS, DaisyUI, Flowbite
+          </p>
+        </div>
+        <div class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold text-center">Backend</h3>
+          <p class="text-sm text-slate-500 text-center">PHP</p>
+        </div>
+        <div class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold text-center">Database</h3>
+          <p class="text-sm text-slate-500 text-center">MySQL</p>
+        </div>
+        <div class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold text-center">Tools</h3>
+          <p class="text-sm text-slate-500 text-center">Git, Figma, VSCode, Trello, Jira</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section id="certificates" class="container-px mx-auto max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">Certificates</h2>
+      <ul class="mt-4 grid sm:grid-cols-2 gap-4">
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <div class="flex items-center justify-between">
+            <strong> Oracle Academy: Database Foundations</strong
+            ><span class="text-xs text-slate-500">Jun 2022</span>
+          </div>
+        </li>
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <div class="flex items-center justify-between">
+            <strong>Digital Startup Program </strong
+            ><span class="text-xs text-slate-500">Sept 2023</span>
+          </div>
+        </li>
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <div class="flex items-center justify-between">
+            <strong>CyberSAFE Training </strong
+            ><span class="text-xs text-slate-500">Jun 2023</span>
+          </div>
+        </li>
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <div class="flex items-center justify-between">
+            <strong>Block Bytes: Blockchain 101 </strong
+            ><span class="text-xs text-slate-500">Sept 2023</span>
+          </div>
+        </li>
+        <li class="glass rounded-2xl p-5" data-reveal>
+          <div class="flex items-center justify-between">
+            <strong>Adaptech Workshop </strong
+            ><span class="text-xs text-slate-500">Jun 2023</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- REFERENCES -->
+    <section id="references" class="container-px mx-auto max-w-6xl py-12">
+      <h2 class="text-3xl font-bold">References</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <div class="glass rounded-2xl p-6" data-reveal>
+          <h3 class="font-semibold text-center">
+            James Yanga <br />
+            Chief Technology Officer – Go8 Technology Inc.
+          </h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 text-center">
+            Email : james@go8.tech
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="container-px mx-auto max-w-6xl py-12">
+      <div
+        class="glass rounded-3xl p-8 grid md:grid-cols-2 gap-8 items-center"
+        data-reveal
+      >
+        <div>
+          <h2 class="text-3xl font-bold">Let’s talk</h2>
+          <p class="text-slate-600 dark:text-slate-300 mt-2">
+            Best way to reach me is email. I usually reply within 24 hours.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a
+              href="mailto:yourname@domain.com"
+              class="px-5 py-3 rounded-xl bg-brand-gradient text-white shadow-soft"
+              >Email me</a
+            >
+            <a
+              href="https://cal.com"
+              class="px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:shadow-soft"
+              >Reach Me</a
+            >
+          </div>
+        </div>
+
+        <!-- Contacts -->
+        <div class="grid gap-4">
+          <!-- Email -->
+          <a
+            href="mailto:yourname@domain.com"
+            class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-soft"
+          >
+            <!-- Mail icon -->
+            <svg
+              class="w-5 h-5 mt-0.5 text-brand-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M4 7l8 6 8-6"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <div>
+              <div class="text-xs text-slate-500">Email</div>
+              <div class="font-medium hover:underline">Balane050@gmail.com</div>
+            </div>
+          </a>
+
+          <!-- Phone -->
+          <a
+            href="tel:+639123456789"
+            class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-soft"
+          >
+            <!-- Phone icon -->
+            <svg
+              class="w-5 h-5 mt-0.5 text-brand-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M3 5c0-1.1.9-2 2-2h2c.8 0 1.5.5 1.8 1.2l1 2.5c.3.7.1 1.5-.4 2L8.8 10c.9 1.8 2.4 3.3 4.2 4.2l1.3-1.6c.5-.5 1.3-.7 2-.4l2.5 1c.7.3 1.2 1 1.2 1.8v2c0 1.1-.9 2-2 2h-1C8.7 23 1 15.3 1 6V5c0-1.1.9-2 2-2h0"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <div>
+              <div class="text-xs text-slate-500">Phone</div>
+              <div class="font-medium hover:underline">+63 915 567 6259</div>
+            </div>
+          </a>
+
+          <!-- Location -->
+          <a
+            href="https://maps.google.com/?q=Malabon+City,+Philippines"
+            target="_blank"
+            rel="noopener"
+            class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-soft"
+          >
+            <!-- Map pin icon -->
+            <svg
+              class="w-5 h-5 mt-0.5 text-brand-600"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="10"
+                r="2.5"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+            </svg>
+            <div>
+              <div class="text-xs text-slate-500">Location</div>
+              <div class="font-medium hover:underline">
+                Malabon City, Philippines
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="py-10 text-center text-sm text-slate-500">
+      © <span id="year"></span> Jeffrey Balane • Built with Tailwind v4.1
+    </footer>
+
+    <script type="module" src="./js/app.js" defer></script>
+  </body>
+</html>
